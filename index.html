@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ธนาคารความดี รพ.กุดรัง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* CSS ทั้งหมดใช้ของเดิมได้เลย */
+    :root { 
+      --primary: #008080; --primary-hover: #006666; --secondary: #20B2AA; 
+      --bg-gradient: linear-gradient(135deg, #e0f2f1 0%, #80cbc4 100%);
+      --text-main: #2c3e50; --text-muted: #7f8c8d;
+    }
+    body { font-family: 'Prompt', sans-serif; background: var(--bg-gradient); min-height: 100vh; margin: 0; padding: 20px 15px; color: var(--text-main); display: flex; justify-content: center; align-items: flex-start; }
+    .container { width: 95%; max-width: 1300px; margin: 15px auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); box-sizing: border-box; }
+    .project-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px dashed #e0e0e0; }
+    .project-title { color: var(--primary); font-size: 24px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4;}
+    .project-subtitle { color: var(--text-muted); font-size: 16px; margin: 0; }
+    h2 { text-align: center; color: var(--primary); margin-bottom: 25px; font-size: 20px; font-weight: 500; }
+    form { max-width: 450px; margin: 0 auto; }
+    .center-wrap { max-width: 450px; margin: 0 auto; text-align: center; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text-main); }
+    input, select { width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-family: 'Prompt', sans-serif; font-size: 15px; background-color: #f8fafc; transition: all 0.3s ease; }
+    input:focus, select:focus { outline: none; border-color: var(--secondary); background-color: #ffffff; box-shadow: 0 0 0 4px rgba(32, 178, 170, 0.15); }
+    button { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; font-family: 'Prompt', sans-serif; box-shadow: 0 4px 15px rgba(0, 128, 128, 0.3); }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 128, 128, 0.4); }
+    button:active { transform: translateY(1px); }
+    button:disabled { background: #cbd5e1; box-shadow: none; cursor: not-allowed; transform: none; }
+    .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; }
+    .btn-outline:hover { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(0, 128, 128, 0.2); }
+    .btn-admin { background: #34495e; box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3); }
+    .view-section { display: none; animation: fadeIn 0.4s ease; }
+    .view-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .loading { text-align: center; color: var(--primary); display: none; margin-top: 15px; font-weight: 500; font-size: 15px; }
+    .user-profile { max-width: 900px; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); padding: 14px; border-radius: 12px; margin: 0 auto 20px auto; text-align: center; font-size: 16px; color: var(--primary-hover); font-weight: 500; }
+    .logout-text { display: block; text-align: center; margin-top: 25px; color: #e74c3c; font-size: 15px; cursor: pointer; font-weight: 500; transition: 0.2s; }
+    .logout-text:hover { text-decoration: underline; color: #c0392b; }
+    .admin-link { text-align: center; margin-top: 15px; color: #95a5a6; font-size: 13px; cursor: pointer; }
+    .admin-link:hover { color: #34495e; text-decoration: underline; }
+    .nav-buttons { max-width: 900px; display: flex; gap: 15px; margin: 0 auto 25px auto; flex-wrap: wrap; }
+    .nav-buttons button { flex: 1; min-width: 150px; margin-top: 0; padding: 12px 10px; font-size: 14px; border-radius: 10px;}
+    table { width: 100%; border-collapse: collapse; margin: 15px auto; font-size: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    th, td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; text-align: left; }
+    th { background-color: var(--primary); color: white; font-weight: 500; }
+    tr.clickable-row { cursor: pointer; transition: 0.2s; }
+    tr.clickable-row:hover { background-color: #e2e8f0 !important; transform: scale(1.01); }
+    tr:nth-child(even) { background-color: #f8fafc; }
+    .activity-card { max-width: 650px; margin: 0 auto 20px auto; border: 1.5px solid #e2e8f0; border-radius: 15px; padding: 20px; background: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: left;}
+    .activity-card img { width: 100%; border-radius: 10px; margin-top: 15px; object-fit: cover; }
+    .activity-title { font-weight: 600; color: var(--primary); font-size: 18px; margin-bottom: 5px;}
+    .activity-meta { font-size: 14px; color: var(--text-muted); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; padding-bottom: 20px; }
+    .gallery-item { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: left; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .gallery-item:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); border-color: var(--secondary); }
+    .gallery-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
+    .gallery-item-title { font-size: 14px; font-weight: 600; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px;}
+    .gallery-item-name { font-size: 13px; color: #34495e; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+    .gallery-item-phase { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .admin-layout { display: flex; flex-direction: column; gap: 30px; margin-top: 30px; }
+    .admin-col-left { flex: 1; }
+    .admin-col-right { flex: 1; }
+    @media (min-width: 950px) {
+      .admin-layout { flex-direction: row; align-items: flex-start; }
+      .admin-col-left { flex: 0 0 380px; } 
+      .admin-col-right { flex: 1; min-width: 0; } 
+    }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .modal-overlay.show { opacity: 1; pointer-events: auto; }
+    .alert-box { background: #ffffff; width: 90%; max-width: 380px; padding: 25px; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.3s ease; max-height: 90vh; overflow-y: auto;}
+    .modal-overlay.show .alert-box { transform: scale(1); }
+    .alert-icon { font-size: 40px; margin-bottom: 10px; }
+    .alert-message { font-size: 16px; color: var(--text-main); margin-bottom: 20px; line-height: 1.5; white-space: pre-line; }
+    .alert-btn { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-size: 15px; font-family: 'Prompt', sans-serif; cursor: pointer; width: 100%; }
+    .action-btn { flex: 1; padding: 10px; font-size: 14px; border-radius: 8px; margin-top: 0; border: none; cursor: pointer; font-family: 'Prompt', sans-serif;}
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="project-header">
+    <h1 class="project-title">โครงการส่งเสริมองค์กรคุณธรรมต้นแบบ</h1>
+    <p class="project-subtitle">โรงพยาบาลกุดรัง ปีงบประมาณ 2570</p>
+  </div>
+
+  <div id="loginView" class="view-section active">
+    <h2>เข้าสู่ระบบธนาคารความดี</h2>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group"><label>เบอร์โทรศัพท์</label><input type="tel" id="loginPhone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+      <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="loginPass" placeholder="กรอกรหัสผ่าน" required></div>
+      <button type="submit" id="btnLogin">เข้าสู่ระบบ</button>
+    </form>
+    <div id="loginLoading" class="loading">⏳ กำลังตรวจสอบข้อมูล...</div>
+    <div class="center-wrap">
+      <p style="font-size: 13px; color: #e74c3c; margin-top: 15px;">💡 หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ</p>
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+      <p style="font-size: 14px; margin-bottom: 10px; color: var(--text-muted);">ยังไม่เคยลงทะเบียนใช่ไหม?</p>
+      <button class="btn-outline" onclick="switchView('registerView')">ลงทะเบียนเจ้าหน้าที่ใหม่</button>
+      <p class="admin-link" onclick="switchView('adminLoginView')">🔒 เข้าสู่ระบบผู้ดูแลระบบ (Admin)</p>
+    </div>
+  </div>
+
+  <div id="adminLoginView" class="view-section">
+    <h2 style="color: #34495e;">สำหรับผู้ดูแลระบบ (Admin)</h2>
+    <form onsubmit="handleAdminLogin(event)">
+      <div class="form-group"><label>ชื่อผู้ใช้ (Username)</label><input type="text" id="adminUser" placeholder="กรอกชื่อผู้ใช้ Admin" required></div>
+      <div class="form-group"><label>รหัสผ่าน (Password)</label><input type="password" id="adminPass" placeholder="กรอกรหัสผ่าน Admin" required></div>
+      <button type="submit" id="btnAdminLogin" class="btn-admin">เข้าสู่ระบบ Admin</button>
+    </form>
+    <div id="adminLoginLoading" class="loading" style="color:#34495e;">⏳ กำลังตรวจสอบสิทธิ์...</div>
+    <p class="logout-text" onclick="switchView('loginView')" style="color: var(--primary);">⬅ กลับไปหน้าเข้าสู่ระบบปกติ</p>
+  </div>
+
+  <div id="registerView" class="view-section">
+    <h2>ลงทะเบียนใหม่</h2>
+    <form onsubmit="handleRegister(event)">
+      <div class="form-group"><label>ชื่อ-สกุล</label><input type="text" id="regName" placeholder="ชื่อ-สกุล" required></div>
+      <div class="form-group"><label>อายุ (ปี)</label><input type="number" id="regAge" placeholder="ระบุอายุ" required></div>
+      <div class="form-group"><label>ตำแหน่ง</label><input type="text" id="regPosition" placeholder="ระบุตำแหน่ง" required></div>
+      <div class="form-group"><label>หน่วยงาน</label><input type="text" id="regDept" placeholder="ระบุกลุ่มงาน" required></div>
+      <div class="form-group"><label>เบอร์โทรศัพท์ (ใช้เป็นไอดีล็อกอิน)</label><input type="tel" id="regPhone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+      <div class="form-group"><label>ตั้งรหัสผ่าน</label><input type="password" id="regPass" placeholder="สร้างรหัสผ่านเพื่อเข้าสู่ระบบ" required></div>
+      <button type="submit" id="btnRegister">ยืนยันการลงทะเบียน</button>
+    </form>
+    <div id="regLoading" class="loading">⏳ กำลังบันทึกข้อมูล...</div>
+    <p class="logout-text" style="color: var(--primary);" onclick="switchView('loginView')">กลับไปหน้าเข้าสู่ระบบ</p>
+  </div>
+
+  <div id="uploadView" class="view-section">
+    <h2>ส่งกิจกรรมทำความดี</h2>
+    <div class="user-profile" id="displayUser">ผู้ใช้งาน: -</div>
+    <div class="nav-buttons">
+      <button type="button" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color:white;">📍 หน้าส่งผลงาน</button>
+      <button type="button" style="background: #94a3b8; box-shadow: none; color:white;" onclick="switchView('leaderboardView'); loadUserLeaderboard();">🏆 ดูอันดับ</button>
+      <button type="button" style="background: #e67e22; box-shadow: none; color:white;" onclick="viewMyActivities()">🗂 ประวัติของฉัน</button>
+    </div>
+    <form onsubmit="handleUpload(event)">
+      <div class="form-group">
+        <label>ส่งผลงานสำหรับ</label>
+        <select id="activityPhase" required>
+          <option value="Phase 1 (ต.ค.-ธ.ค. 69)">Phase 1 (ต.ค. - ธ.ค. 69)</option>
+          <option value="Phase 2 (ม.ค.-มี.ค. 70)" disabled>Phase 2 (ม.ค. - มี.ค. 70) - ยังไม่เปิดให้ส่ง</option>
+          <option value="Phase 3 (เม.ย.-มิ.ย. 70)" disabled>Phase 3 (เม.ย. - มิ.ย. 70) - ยังไม่เปิดให้ส่ง</option>
+          <option value="Phase 4 (ก.ค.-ก.ย. 70)" disabled>Phase 4 (ก.ค. - ก.ย. 70) - ยังไม่เปิดให้ส่ง</option>
+        </select>
+      </div>
+      <div class="form-group"><label>หัวข้อกิจกรรมทำความดี</label><input type="text" id="activityName" placeholder="บรรยายกิจกรรมสั้นๆ 1-2 บรรทัด" required></div>
+      <div class="form-group"><label>แนบไฟล์ภาพประกอบ</label><input type="file" id="imageFile" accept="image/*" required style="padding: 9px 15px;"></div>
+      <button type="submit" id="btnUpload">บันทึกกิจกรรม</button>
+    </form>
+    <div id="uploadLoading" class="loading">⏳ กำลังอัปโหลดรูปภาพ...</div>
+    <div class="center-wrap"><span class="logout-text" onclick="handleLogout()">ออกจากระบบ</span></div>
+  </div>
+
+  <div id="leaderboardView" class="view-section">
+    <h2>กระดานผู้นำ (Leaderboard)</h2>
+    <div class="user-profile" id="displayUserLB">ผู้ใช้งาน: -</div>
+    <div class="nav-buttons">
+      <button type="button" style="background: #94a3b8; box-shadow: none; color:white;" onclick="switchView('uploadView')">📍 หน้าส่งผลงาน</button>
+      <button type="button" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color:white;" onclick="loadUserLeaderboard()">🔄 โหลดข้อมูลล่าสุด</button>
+      <button type="button" style="background: #e67e22; box-shadow: none; color:white;" onclick="viewMyActivities()">🗂️ ประวัติของฉัน</button>
+    </div>
+    <div id="lbLoading" class="loading">⏳ กำลังดึงข้อมูลอันดับ...</div>
+    <table style="max-width: 1000px;">
+      <thead><tr><th>อันดับ</th><th>ชื่อ-สกุล</th><th>ผลงาน</th></tr></thead>
+      <tbody id="leaderboardBody"></tbody>
+    </table>
+    <div class="center-wrap"><span class="logout-text" onclick="handleLogout()">ออกจากระบบ</span></div>
+  </div>
+
+  <div id="adminDashboardView" class="view-section">
+    <h2 style="color: #34495e;">แผงควบคุม Admin</h2>
+    <div class="user-profile" style="background: #ecf0f1; color: #2c3e50; border-color:#bdc3c7;">สถานะ: ผู้ดูแลระบบสูงสุด</div>
+    <div class="nav-buttons">
+      <button type="button" class="btn-admin" style="background: #8e44ad;" onclick="loadAdminFullLeaderboard()">🏆 อันดับบุคคลทั้งหมด</button>
+      <button type="button" class="btn-admin" style="background: #e67e22;" onclick="loadDepartmentSummary()">📊 สรุปรายหน่วยงาน</button>
+      <button type="button" class="btn-admin" onclick="loadAdminDashboard()">🔄 โหลดข้อมูลล่าสุด</button>
+    </div>
+    <div class="admin-layout">
+      <div class="admin-col-left">
+        <h3 style="color: #34495e; font-size: 18px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 8px; margin-top: 0;">🏆 Top 10 ผู้นำการทำความดี</h3>
+        <div id="adminTop10Loading" class="loading" style="color: #34495e;">⏳ กำลังดึงข้อมูลอันดับ...</div>
+        <table style="margin-top: 10px; margin-bottom: 0;">
+          <thead style="background: #34495e;"><tr><th style="background: #34495e; width: 50px; text-align: center;">อันดับ</th><th style="background: #34495e;">ชื่อ-สกุล</th><th style="background: #34495e;">ผลงาน</th></tr></thead>
+          <tbody id="adminTop10Body"></tbody>
+        </table>
+      </div>
+      <div class="admin-col-right">
+        <h3 style="color: #8e44ad; font-size: 18px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 8px; margin-top: 0; text-align: left;">🖼️ คลังรูปภาพกิจกรรมล่าสุด</h3>
+        <p style="text-align: left; font-size: 13px; color: var(--text-muted); margin-top: 0;">แตะที่รูปเพื่อตรวจสอบและจัดการผลงานของบุคคลนั้น</p>
+        <div id="adminGalleryLoading" class="loading" style="color: #8e44ad;">⏳ กำลังโหลดคลังรูปภาพ...</div>
+        <div id="adminGalleryContent" class="gallery-grid" style="margin-top: 10px;"></div>
+      </div>
+    </div>
+    <div class="center-wrap" style="margin-top: 30px;"><span class="logout-text" onclick="handleLogout()">ออกจากระบบ Admin</span></div>
+  </div>
+
+  <div id="adminFullLeaderboardView" class="view-section">
+    <h2 style="color: #34495e;">🏆 อันดับเจ้าหน้าที่ทั้งหมด</h2>
+    <div class="center-wrap"><button class="btn-outline" onclick="goBackToAdminDash()" style="margin-bottom: 15px; padding: 12px; border-color: #34495e; color: #34495e;">⬅ ย้อนกลับแผงควบคุม</button></div>
+    <div id="adminFullLbLoading" class="loading" style="color: #34495e;">⏳ กำลังดึงข้อมูลอันดับ...</div>
+    <table style="max-width: 1000px;">
+      <thead style="background: #34495e;"><tr><th style="background: #34495e; width: 60px; text-align: center;">อันดับ</th><th style="background: #34495e;">ชื่อ-สกุล</th><th style="background: #34495e;">ผลงาน</th></tr></thead>
+      <tbody id="adminFullLeaderboardBody"></tbody>
+    </table>
+  </div>
+
+  <div id="adminDeptSummaryView" class="view-section">
+    <h2 style="color: #e67e22;">📊 สรุปผลงานรายหน่วยงาน</h2>
+    <div class="center-wrap"><button class="btn-outline" onclick="goBackToAdminDash()" style="margin-bottom: 15px; padding: 12px; border-color: #e67e22; color: #e67e22;">⬅ ย้อนกลับแผงควบคุม</button></div>
+    <div id="adminDeptLoading" class="loading" style="color: #e67e22;">⏳ กำลังคำนวณข้อมูล...</div>
+    <table style="max-width: 850px;">
+      <thead style="background: #e67e22;">
+        <tr><th style="background: #e67e22; width: 60px; text-align: center;">อันดับ</th><th style="background: #e67e22;">ชื่อหน่วยงาน / กลุ่มงาน</th><th style="background: #e67e22; text-align: center; width: 120px;">จนท. (คน)</th><th style="background: #e67e22; text-align: center; width: 150px;">รวมผลงาน (ชิ้น)</th></tr>
+      </thead>
+      <tbody id="adminDeptBody"></tbody>
+    </table>
+  </div>
+
+  <div id="detailView" class="view-section">
+    <h2 style="margin-bottom: 10px; color: var(--primary);" id="detailTitle">จัดการผลงาน</h2>
+    <div class="user-profile" style="background: #f1f5f9; color: var(--text-main); font-size: 18px;">ของ: <span id="detailName" style="color: var(--primary); font-weight: 600;">-</span></div>
+    <div class="center-wrap"><button class="btn-outline" onclick="goBackFromDetail()" style="margin-bottom: 20px; padding: 12px; border-color: #34495e; color: #34495e;">⬅ ย้อนกลับ</button></div>
+    <div id="detailLoading" class="loading">⏳ กำลังโหลดข้อมูลผลงาน...</div>
+    <div id="detailContent"></div>
+  </div>
+
+</div>
+
+<!-- Alerts -->
+<div id="customAlert" class="modal-overlay">
+  <div class="alert-box">
+    <div class="alert-icon" id="alertIcon">✨</div>
+    <div class="alert-message" id="alertMsg">ข้อความแจ้งเตือน</div>
+    <button class="alert-btn" onclick="closeAlert()">ตกลง</button>
+  </div>
+</div>
+<div id="editModal" class="modal-overlay">
+  <div class="alert-box" style="text-align: left;">
+    <h3 style="margin-top:0; color:var(--primary); text-align:center;">แก้ไขข้อมูลผลงาน</h3>
+    <div class="form-group"><label>หัวข้อกิจกรรม</label><input type="text" id="editNameField" required></div>
+    <div class="form-group"><label>ส่งผลงานสำหรับ</label>
+      <select id="editPhaseField" required>
+        <option value="Phase 1 (ต.ค.-ธ.ค. 69)">Phase 1 (ต.ค. - ธ.ค. 69)</option>
+        <option value="Phase 2 (ม.ค.-มี.ค. 70)">Phase 2 (ม.ค. - มี.ค. 70)</option>
+        <option value="Phase 3 (เม.ย.-มิ.ย. 70)">Phase 3 (เม.ย. - มิ.ย. 70)</option>
+        <option value="Phase 4 (ก.ค.-ก.ย. 70)">Phase 4 (ก.ค. - ก.ย. 70)</option>
+      </select>
+    </div>
+    <div style="display:flex; gap:10px; margin-top: 20px;">
+      <button class="action-btn" onclick="saveEdit()" style="background: var(--primary); color:white;">💾 บันทึก</button>
+      <button class="action-btn" onclick="closeEditModal()" style="background: #95a5a6; color:white;">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+<div id="confirmModal" class="modal-overlay">
+  <div class="alert-box">
+    <div class="alert-icon">⚠</div>
+    <div class="alert-message" style="font-weight: 500;">คุณแน่ใจหรือไม่ว่าต้องการลบผลงานชิ้นนี้?<br><span style="font-size: 13px; color: #e74c3c; font-weight: 400;">(หากลบแล้วจะไม่สามารถกู้คืนได้)</span></div>
+    <div style="display:flex; gap:10px;">
+      <button class="action-btn" onclick="executeDelete()" style="background: #e74c3c; color:white;">🗑️ ยืนยันการลบ</button>
+      <button class="action-btn" onclick="closeConfirmModal()" style="background: #95a5a6; color:white;">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ----------------------------------------------------
+  // 👉 1. นำ URL เว็บแอปจาก Google Apps Script มาใส่ในบรรทัดนี้ครับ!
+  // ----------------------------------------------------
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJTHxh_UC1IG7cupRyOBnznmY_eGv74BfACrRm3rdfXAbCS8ylJpQG9GadUFNy4emG3w/exec"; 
+  
+  let currentStaffId = ""; let currentStaffName = ""; let isAdminUser = false;
+  let viewingStaffId = ""; let editingActivityId = ""; let deletingActivityId = ""; let lastViewBeforeDetail = "";
+
+  function showAlert(msg) {
+    document.getElementById('alertMsg').innerText = msg;
+    document.getElementById('customAlert').classList.add('show');
+  }
+  function closeAlert() { document.getElementById('customAlert').classList.remove('show'); }
+  function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+  }
+
+  // --- ระบบเรียกใช้งาน API แทน google.script.run ---
+  async function apiPost(action, payload = {}) {
+    payload.action = action;
+    try {
+      const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      return await response.json();
+    } catch (error) {
+      console.error(error); return { success: false, message: "การเชื่อมต่อขัดข้อง กรุณาลองใหม่" };
+    }
+  }
+
+  async function apiGet(action, params = "") {
+    try {
+      const response = await fetch(SCRIPT_URL + "?action=" + action + params);
+      return await response.json();
+    } catch (error) {
+      console.error(error); return null;
+    }
+  }
+
+  async function handleLogin(event) {
+    event.preventDefault();
+    document.getElementById('btnLogin').disabled = true; document.getElementById('loginLoading').style.display = 'block';
+    const phone = document.getElementById('loginPhone').value.trim(); const pass = document.getElementById('loginPass').value.trim();
+    
+    const res = await apiPost('verifyLogin', { phone: phone, password: pass });
+    
+    document.getElementById('btnLogin').disabled = false; document.getElementById('loginLoading').style.display = 'none';
+    if (res.success) {
+      currentStaffId = res.staffId; currentStaffName = res.name; isAdminUser = false;
+      document.getElementById('displayUser').innerText = "ผู้ใช้งาน: " + currentStaffName;
+      document.getElementById('displayUserLB').innerText = "ผู้ใช้งาน: " + currentStaffName;
+      document.getElementById('loginPhone').value = ''; document.getElementById('loginPass').value = '';
+      switchView('uploadView');
+    } else { showAlert(res.message); }
+  }
+
+  async function handleAdminLogin(event) {
+    event.preventDefault();
+    document.getElementById('btnAdminLogin').disabled = true; document.getElementById('adminLoginLoading').style.display = 'block';
+    const user = document.getElementById('adminUser').value.trim(); const pass = document.getElementById('adminPass').value.trim();
+    
+    const res = await apiPost('verifyAdminLogin', { username: user, password: pass });
+    
+    document.getElementById('btnAdminLogin').disabled = false; document.getElementById('adminLoginLoading').style.display = 'none';
+    if (res.success) {
+      isAdminUser = true; currentStaffId = ""; currentStaffName = "";
+      document.getElementById('adminUser').value = ''; document.getElementById('adminPass').value = '';
+      switchView('adminDashboardView'); loadAdminDashboard();
+    } else { showAlert(res.message); }
+  }
+
+  async function handleRegister(event) {
+    event.preventDefault();
+    document.getElementById('btnRegister').disabled = true; document.getElementById('regLoading').style.display = 'block';
+    
+    const data = {
+      fullName: document.getElementById('regName').value, age: document.getElementById('regAge').value,
+      position: document.getElementById('regPosition').value, department: document.getElementById('regDept').value,
+      phone: document.getElementById('regPhone').value, password: document.getElementById('regPass').value
+    };
+    
+    const response = await apiPost('registerStaff', { data: data });
+    document.getElementById('btnRegister').disabled = false; document.getElementById('regLoading').style.display = 'none';
+    
+    if (response && response.success === true) {
+      showAlert(response.message);
+      document.getElementById('regName').value = ''; document.getElementById('regAge').value = '';
+      document.getElementById('regPosition').value = ''; document.getElementById('regDept').value = '';
+      document.getElementById('regPhone').value = ''; document.getElementById('regPass').value = '';
+      switchView('loginView'); 
+    } else {
+      showAlert(response ? response.message : "เกิดข้อผิดพลาดในการเชื่อมต่อ");
+    }
+  }
+
+  function handleUpload(event) {
+    event.preventDefault();
+    const file = document.getElementById('imageFile').files[0];
+    if (!file) return;
+    document.getElementById('btnUpload').disabled = true; document.getElementById('uploadLoading').style.display = 'block';
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const data = { staffId: currentStaffId, activityName: document.getElementById('activityName').value, activityPhase: document.getElementById('activityPhase').value, imageBase64: e.target.result };
+      const response = await apiPost('saveData', { formObject: data });
+      showAlert(response.message);
+      document.getElementById('activityName').value = ''; document.getElementById('imageFile').value = '';
+      document.getElementById('btnUpload').disabled = false; document.getElementById('uploadLoading').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function goBackToAdminDash() { switchView('adminDashboardView'); loadAdminDashboard(); }
+
+  async function loadAdminDashboard() {
+    const tbody10 = document.getElementById('adminTop10Body'); const load10 = document.getElementById('adminTop10Loading');
+    load10.style.display = 'block'; tbody10.innerHTML = '';
+    const data10 = await apiGet('getLeaderboardData');
+    load10.style.display = 'none'; renderTable(data10, tbody10, true, 10, 'adminDashboardView'); 
+
+    const galContainer = document.getElementById('adminGalleryContent'); const galLoad = document.getElementById('adminGalleryLoading');
+    galLoad.style.display = 'block'; galContainer.innerHTML = '';
+    const results = await apiGet('getAllActivities');
+    galLoad.style.display = 'none'; renderGallery(results, galContainer, 'adminDashboardView');
+  }
+
+  async function loadAdminFullLeaderboard() {
+    switchView('adminFullLeaderboardView');
+    const tbodyFull = document.getElementById('adminFullLeaderboardBody'); const loadFull = document.getElementById('adminFullLbLoading');
+    loadFull.style.display = 'block'; tbodyFull.innerHTML = '';
+    const data = await apiGet('getLeaderboardData');
+    loadFull.style.display = 'none'; renderTable(data, tbodyFull, true, 0, 'adminFullLeaderboardView'); 
+  }
+
+  async function loadDepartmentSummary() {
+    switchView('adminDeptSummaryView');
+    const tbodyDept = document.getElementById('adminDeptBody'); const loadDept = document.getElementById('adminDeptLoading');
+    loadDept.style.display = 'block'; tbodyDept.innerHTML = '';
+    const data = await apiGet('getDepartmentSummary');
+    loadDept.style.display = 'none';
+    if(data && data.length > 0) {
+      data.forEach((item, index) => {
+        tbodyDept.innerHTML += `<tr><td style="text-align: center;"><b>${index + 1}</b></td><td>${item.department}</td>
+          <td style="text-align: center; color: #34495e; font-weight: 500;">${item.staffCount}</td>
+          <td style="text-align: center;"><b style="color:var(--primary); font-size:18px;">${item.totalScore}</b></td></tr>`;
+      });
+    } else { tbodyDept.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color:#7f8c8d;">ยังไม่มีข้อมูลผลงาน</td></tr>'; }
+  }
+
+  async function loadUserLeaderboard() {
+    const tbody = document.getElementById('leaderboardBody'); const loading = document.getElementById('lbLoading');
+    loading.style.display = 'block'; tbody.innerHTML = '';
+    const data = await apiGet('getLeaderboardData');
+    loading.style.display = 'none'; renderTable(data, tbody, false, 0, 'leaderboardView');
+  }
+
+  function renderTable(data, tbody, isAdmin, limit, sourceView) {
+    if(data && data.length > 1) {
+      let count = 0;
+      for (let i = 1; i < data.length; i++) {
+        if(data[i][0] !== "") { 
+          count++; if (limit > 0 && count > limit) break; 
+          if(isAdmin) {
+            tbody.innerHTML += `<tr class="clickable-row" onclick="viewUserDetail('${data[i][0]}', '${data[i][1]}', '${sourceView}')" title="คลิกเพื่อตรวจสอบ/แก้ไข">
+              <td style="text-align: center;"><b>${i}</b></td><td>${data[i][1]}<br><small style="color:#7f8c8d;">${data[i][2]}</small></td>
+              <td><b style="color:var(--primary); font-size:16px;">${data[i][3]}</b><br><small style="color:#e67e22; font-size:11px;">🔍 คลิกจัดการ</small></td></tr>`;
+          } else {
+            tbody.innerHTML += `<tr><td style="text-align: center;"><b>${i}</b></td>
+              <td>${data[i][1]}<br><small style="color:#7f8c8d;">${data[i][2]}</small></td>
+              <td><b style="color:var(--primary); font-size:16px;">${data[i][3]}</b></td></tr>`;
+          }
+        }
+      }
+      if(count === 0) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:#7f8c8d;">ยังไม่มีข้อมูลผลงาน</td></tr>'; 
+    } else { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:#7f8c8d;">ยังไม่มีข้อมูลผลงาน</td></tr>'; }
+  }
+
+  function renderGallery(results, container, sourceView) {
+    if(results && results.length > 0) {
+      results.forEach(item => {
+        container.innerHTML += `<div class="gallery-item" onclick="viewUserDetail('${item.staffId}', '${item.staffName}', '${sourceView}')">
+          <img src="${item.imgUrl}" alt="กิจกรรม" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+          <div class="gallery-item-title" title="${item.activityName}">${item.activityName}</div>
+          <div class="gallery-item-name">👤 ${item.staffName}</div><div class="gallery-item-phase">📍 ${item.phase}</div></div>`;
+      });
+    } else { container.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; color:#7f8c8d; padding:20px;">ยังไม่มีรูปภาพในระบบ</p>'; }
+  }
+
+  function viewMyActivities() { document.getElementById('detailTitle').innerText = "ประวัติผลงานของฉัน"; viewUserDetail(currentStaffId, currentStaffName, 'uploadView'); }
+
+  function goBackFromDetail() {
+    if (isAdminUser) {
+      if(lastViewBeforeDetail === 'adminFullLeaderboardView') loadAdminFullLeaderboard(); 
+      else goBackToAdminDash(); 
+    } else { switchView('uploadView'); }
+  }
+
+  async function viewUserDetail(staffId, staffName, sourceView) {
+    viewingStaffId = staffId; if(sourceView) lastViewBeforeDetail = sourceView; 
+    document.getElementById('detailName').innerText = staffName;
+    document.getElementById('detailContent').innerHTML = ''; document.getElementById('detailLoading').style.display = 'block';
+    switchView('detailView'); 
+    
+    const results = await apiGet('getUserActivities', '&staffId=' + staffId);
+    document.getElementById('detailLoading').style.display = 'none';
+    const container = document.getElementById('detailContent');
+    if(results && results.length > 0) {
+      results.forEach(item => {
+        let actionButtons = `<div style="margin-top: 15px; display: flex; gap: 10px;">
+          <button class="action-btn" style="background: #f39c12; color:white;" onclick="openEditModal('${item.id}', '${item.activityName}', '${item.phase}')">✏ แก้ไขข้อมูล</button>
+          <button class="action-btn" style="background: #e74c3c; color:white;" onclick="confirmDelete('${item.id}')">🗑️ ลบผลงาน</button></div>`;
+        container.innerHTML += `<div class="activity-card"><div class="activity-title">${item.activityName}</div>
+          <div class="activity-meta">📍 ${item.phase} | 🗓 ส่งเมื่อ: ${item.date}</div>
+          <img src="${item.imgUrl}" alt="รูปภาพกิจกรรม" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">${actionButtons}</div>`;
+      });
+    } else { container.innerHTML = '<p style="text-align:center; color:#7f8c8d; padding:20px;">ไม่พบประวัติผลงาน</p>'; }
+  }
+
+  function openEditModal(id, currentName, currentPhase) {
+    editingActivityId = id; document.getElementById('editNameField').value = currentName;
+    document.getElementById('editPhaseField').value = currentPhase; document.getElementById('editModal').classList.add('show');
+  }
+  function closeEditModal() { document.getElementById('editModal').classList.remove('show'); }
+  
+  async function saveEdit() {
+    const newName = document.getElementById('editNameField').value; const newPhase = document.getElementById('editPhaseField').value;
+    if(!newName) { showAlert('กรุณากรอกหัวข้อกิจกรรม'); return; }
+    closeEditModal(); document.getElementById('detailLoading').style.display = 'block';
+    const res = await apiPost('editActivity', { activityId: editingActivityId, newName: newName, newPhase: newPhase });
+    showAlert(res.message);
+    if(res.success) viewUserDetail(viewingStaffId, document.getElementById('detailName').innerText); 
+    else document.getElementById('detailLoading').style.display = 'none'; 
+  }
+
+  function confirmDelete(id) { deletingActivityId = id; document.getElementById('confirmModal').classList.add('show'); }
+  function closeConfirmModal() { document.getElementById('confirmModal').classList.remove('show'); }
+
+  async function executeDelete() {
+    closeConfirmModal(); document.getElementById('detailLoading').style.display = 'block';
+    const res = await apiPost('deleteActivity', { activityId: deletingActivityId });
+    showAlert(res.message);
+    if(res.success) viewUserDetail(viewingStaffId, document.getElementById('detailName').innerText); 
+    else document.getElementById('detailLoading').style.display = 'none'; 
+  }
+
+  function handleLogout() { currentStaffId = ""; currentStaffName = ""; isAdminUser = false; switchView('loginView'); }
+</script>
+</body>
+</html>
